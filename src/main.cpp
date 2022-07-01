@@ -5,7 +5,18 @@
 #include <fstream>
 #include <filesystem>
 
-int main(int argc, char *argv[]) {
+#include "../include/program_options.hpp"
+
+int main(int argc, char* argv[]) {
+    // Error log
+
+    try {
+        program_options::parse(argc, argv);
+    }
+    catch (std::exception e) {
+        std::cerr << e.what() << std::endl;
+    }
+
     if (argc <= 2) {
         std::cout << "Not enough arguments provided (" << argc << ")";
     }
@@ -19,7 +30,7 @@ int main(int argc, char *argv[]) {
         Output.open(outputPath, std::ios_base::app);
 
         // Loop trough files and get file sizes
-        long long totalSize = 0;
+        unsigned long long totalSize = 0;
         for (const auto& dirEntry : std::filesystem::recursive_directory_iterator(folderPath)) {
             if(!dirEntry.is_directory()) {
                 //std::cout << dirEntry.file_size() << std::endl;
